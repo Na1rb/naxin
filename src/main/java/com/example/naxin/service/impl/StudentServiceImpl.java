@@ -15,25 +15,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int createStudent(Student student) {
-        check(student);
+        // 验证数据
+        String validateResult = student.validate();
+        if (validateResult != null) {
+            throw new RuntimeException(validateResult);
+        }
 
+        // 检查学号是否已存在
         if (studentMapper.existsByStudentId(student.getStudentId()) > 0) {
             throw new RuntimeException("学号已存在");
         }
 
         return studentMapper.insert(student);
-    }
-
-    private void check(Student student) {
-        if (student.getStudentId() == null || student.getStudentId().trim().isEmpty()) {
-            throw new RuntimeException("学号不能为空");
-        }
-        if (student.getName() == null || student.getName().trim().isEmpty()) {
-            throw new RuntimeException("姓名不能为空");
-        }
-        if (student.getClassName() == null || student.getClassName().trim().isEmpty()) {
-            throw new RuntimeException("班级不能为空");
-        }
     }
 
     @Override
@@ -61,16 +54,19 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public int updateStudent(Student student) {
-        if (student.getId() == null) {
-            throw new RuntimeException("ID不能为空");
+        // 验证数据
+        String validateResult = student.validate();
+        if (validateResult != null) {
+            throw new RuntimeException(validateResult);
         }
-        check(student);
 
+        // 检查学生是否存在
         Student existing = studentMapper.selectById(student.getId());
         if (existing == null) {
             throw new RuntimeException("学生不存在");
         }
 
+        // 检查学号是否重复（排除当前学生）
         if (!existing.getStudentId().equals(student.getStudentId())) {
             if (studentMapper.existsByStudentId(student.getStudentId()) > 0) {
                 throw new RuntimeException("学号已存在");
