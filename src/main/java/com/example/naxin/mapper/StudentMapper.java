@@ -13,10 +13,6 @@ public interface StudentMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(Student student);
 
-    // 查询所有学生
-    @Select("SELECT * FROM students ORDER BY id DESC")
-    List<Student> selectAll();
-
     // 根据ID查询
     @Select("SELECT * FROM students WHERE id = #{id}")
     Student selectById(Integer id);
@@ -49,4 +45,16 @@ public interface StudentMapper {
     // 检查学号是否存在（排除指定ID）
     @Select("SELECT COUNT(*) FROM students WHERE student_id = #{studentId} AND id != #{id}")
     int existsByStudentIdExcludingId(@Param("studentId") String studentId, @Param("id") Integer id);
+
+    // 分页查询（使用PageHelper自动分页）
+    @Select("SELECT * FROM students ORDER BY id DESC")
+    List<Student> selectAll();
+
+    // 统计条件查询（用于分页）
+    @Select("SELECT COUNT(*) FROM students")
+    long countTotal();
+
+    // 根据条件分页查询（示例）
+    @Select("SELECT * FROM students WHERE class_name LIKE CONCAT('%', #{className}, '%') ORDER BY id DESC")
+    List<Student> selectByCondition(@Param("className") String className);
 }

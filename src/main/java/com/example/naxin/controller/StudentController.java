@@ -1,5 +1,6 @@
 package com.example.naxin.controller;
 
+import com.example.naxin.annotation.RequireRole;
 import com.example.naxin.common.Result;
 import com.example.naxin.entity.Student;
 import com.example.naxin.service.StudentService;
@@ -10,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/students")
 @CrossOrigin(origins = "*")
+@RequireRole({"ADMIN", "USER"}) // 类级别权限：允许管理员和普通用户
 public class StudentController {
 
     @Autowired
@@ -17,6 +19,7 @@ public class StudentController {
 
     // 创建学生
     @PostMapping
+    @RequireRole({"ADMIN"})
     public Result<Student> createStudent(@RequestBody Student student) {
         try {
             int rows = studentService.createStudent(student);
@@ -65,6 +68,7 @@ public class StudentController {
 
     // 更新学生信息
     @PutMapping("/{id}")
+    @RequireRole({"ADMIN"})
     public Result<Student> updateStudent(@PathVariable Integer id, @RequestBody Student student) {
         try {
             student.setId(id);
@@ -81,6 +85,7 @@ public class StudentController {
 
     // 删除学生
     @DeleteMapping("/{id}")
+    @RequireRole({"ADMIN"})
     public Result<Void> deleteStudent(@PathVariable Integer id) {
         try {
             int rows = studentService.deleteStudent(id);
@@ -111,3 +116,4 @@ public class StudentController {
         return Result.success("服务运行正常");
     }
 }
+

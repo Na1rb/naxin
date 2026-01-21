@@ -1,6 +1,7 @@
 package com.example.naxin.entity;
 
 import lombok.Data;
+import java.time.LocalDateTime;
 
 @Data
 public class Student {
@@ -8,7 +9,9 @@ public class Student {
     private String studentId;
     private String name;
     private String className;
-    private String phone;  // 新增手机号字段
+    private String phone;
+    private String createdBy;    // 新增：创建人
+    private LocalDateTime createTime; // 新增：创建时间
 
     // 验证方法
     public String validate() {

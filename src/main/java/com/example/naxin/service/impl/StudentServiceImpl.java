@@ -1,8 +1,11 @@
 package com.example.naxin.service.impl;
 
+import com.example.naxin.common.PageResult;
 import com.example.naxin.entity.Student;
 import com.example.naxin.mapper.StudentMapper;
 import com.example.naxin.service.StudentService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,6 +15,37 @@ public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentMapper studentMapper;
+
+    @Override
+    public PageResult<Student> getStudentsByPage(Integer pageNum, Integer pageSize) {
+        // 使用PageHelper进行分页
+        PageHelper.startPage(pageNum, pageSize);
+        List<Student> students = studentMapper.selectAll();
+
+        // 转换为Page对象获取总数
+        Page<Student> page = (Page<Student>) students;
+
+        return PageResult.success(
+                students,
+                pageNum,
+                pageSize,
+                page.getTotal()
+        );
+    }
+
+    @Override
+    public PageResult<Student> getStudentsByCondition(String className, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Student> students = studentMapper.selectByCondition(className);
+        Page<Student> page = (Page<Student>) students;
+
+        return PageResult.success(
+                students,
+                pageNum,
+                pageSize,
+                page.getTotal()
+        );
+    }
 
     @Override
     public int createStudent(Student student) {
