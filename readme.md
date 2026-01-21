@@ -22,15 +22,16 @@
 CREATE DATABASE IF NOT EXISTS lab_registration;
 USE lab_registration;
 
--- 创建学生表
+-- 创建学生表（包含手机号字段）
 CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id VARCHAR(20) NOT NULL UNIQUE,
     name VARCHAR(50) NOT NULL,
-    class_name VARCHAR(50) NOT NULL
+    class_name VARCHAR(50) NOT NULL,
+    phone VARCHAR(20)
 );
 
 -- 插入测试数据
-INSERT INTO students (student_id, name, class_name) VALUES
-('20230001', '张三', '计算机一班'),
-('20230002', '李四', '计算机二班');
+INSERT INTO students (student_id, name, class_name, phone) VALUES
+('20230001', '张三', '计算机一班', '13800138001'),
+('20230002', '李四', '计算机二班', '13800138002');
